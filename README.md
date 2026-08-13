@@ -1,6 +1,23 @@
-# 🏊 Sterilor ESPHome
+![ESPHome](https://img.shields.io/badge/ESPHome-2026+-blue.svg)
 
-> Bluetooth Low Energy (BLE) integration for Sterilor XP salt chlorinator and pH regulator using ESPHome and Home Assistant.
+![Home Assistant](https://img.shields.io/badge/Home%20Assistant-Compatible-41BDF5.svg)
+
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+
+## Contents
+
+- Overview
+- Features
+- Hardware
+- Dashboard
+- Installation
+- BLE protocol
+- Roadmap
+- License
+
+# 🏊 Sterilor XP ESPHome
+
+> Native ESPHome integration for Sterilor XP salt chlorinator and pH regulator using Bluetooth Low Energy (BLE).
 
 ![Dashboard](images/dashboard.png)
 
