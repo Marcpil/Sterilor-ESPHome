@@ -1,46 +1,45 @@
-![ESPHome](https://img.shields.io/badge/ESPHome-2026+-blue.svg)
-
-![Home Assistant](https://img.shields.io/badge/Home%20Assistant-Compatible-41BDF5.svg)
-
-![License](https://img.shields.io/badge/License-MIT-green.svg)
-
-## Requirements
-
-- Home Assistant
-- ESPHome
-- ESP32
-- Bluetooth Low Energy
-
-## Contents
-
-- Overview
-- Features
-- Hardware
-- Dashboard
-- Installation
-- BLE protocol
-- Roadmap
-- License
-
 # 🏊 Sterilor XP ESPHome
 
-> Native ESPHome integration for Sterilor XP salt chlorinator and pH regulator using Bluetooth Low Energy (BLE).
+> **Native ESPHome integration for Sterilor XP salt chlorinator and pH regulator using Bluetooth Low Energy (BLE).**
+
+**⭐ First open-source ESPHome integration dedicated to Sterilor XP devices.**
+
+---
 
 ![Dashboard](images/dashboard.png)
 
 ---
 
-## ✨ Features
+# ✨ Features
 
-- ✅ Read pool water pH
-- ✅ Read salt chlorinator production (%)
-- ✅ Change production setpoint
-- ✅ Monitor BLE connection status
-- ✅ Native ESPHome integration
-- ✅ Ready-to-use Mushroom dashboard
-- ✅ Local communication only (no cloud)
+## 📊 Monitoring
 
-## Supported hardware
+- 💧 Read pool water pH
+- ⚡ Read salt chlorinator production
+- 🟢 Monitor BLE connectivity
+- 📡 Device status monitoring
+
+## 🎛 Control
+
+- ⚙ Change chlorinator production setpoint
+
+## 🏠 Home Assistant
+
+- Native ESPHome device
+- Mushroom Dashboard included
+- 100% local communication
+- No cloud
+- No proprietary gateway
+
+---
+
+# 📸 Hardware
+
+| ESP32 | Sterilor XP |
+|:------:|:-----------:|
+| ![](images/esp32.png) | ![](images/sterilor.png) |
+
+Compatible with:
 
 - Sterilor XP Salt Chlorinator
 - Sterilor XP pH Regulator
@@ -48,7 +47,9 @@
 - Home Assistant
 - ESPHome
 
-## Dashboard
+---
+
+# 🍄 Dashboard
 
 A complete Mushroom dashboard is included.
 
@@ -56,16 +57,54 @@ It provides:
 
 - Pool water temperature
 - Filtration status
-- Water pH
-- Chlorinator production
-- Cell connection status
-- pH regulator connection status
+- Salt production
+- Pool pH
+- Cell connectivity
+- pH regulator connectivity
 - Filtration controls
 - Production setpoint adjustment
 
 ![Dashboard](images/dashboard.png)
 
-## Repository structure
+---
+
+# 📦 Installation
+
+Installation takes only a few minutes.
+
+1. Flash the ESP32 with the provided ESPHome configuration.
+2. Configure the Bluetooth MAC addresses.
+3. Add the device to Home Assistant.
+4. Import the Mushroom dashboard.
+
+Detailed instructions are available in:
+
+```
+docs/installation.md
+```
+
+---
+
+# 📡 BLE Protocol
+
+The Bluetooth Low Energy protocol has been completely reverse engineered from real Sterilor XP devices.
+
+Currently supported:
+
+- ✅ Production reading
+- ✅ Production setpoint writing
+- ✅ Pool pH reading
+- ✅ Device status monitoring
+
+Technical documentation is available in:
+
+```
+protocol.md
+```
+
+---
+
+# 📁 Repository structure
 
 ```
 Sterilor-ESPHome/
@@ -80,75 +119,78 @@ Sterilor-ESPHome/
 │   └── installation.md
 │
 ├── images/
+│   ├── dashboard.png
+│   ├── esp32.png
+│   └── sterilor.png
 │
 ├── protocol.md
 │
 └── README.md
 ```
 
-## Installation
+---
 
-1. Install ESPHome.
-2. Copy the provided YAML file.
-3. Update the BLE MAC addresses of your Sterilor devices.
-4. Compile and flash the ESP32.
-5. Add the ESPHome device to Home Assistant.
-6. Import the Mushroom dashboard.
+# 🚀 Project status
 
-Detailed installation instructions are available in:
+| Component | Status |
+|-----------|--------|
+| ESPHome firmware | ✅ Stable |
+| Dashboard | ✅ Stable |
+| BLE communication | ✅ Stable |
+| Salt chlorinator | ✅ Supported |
+| pH regulator | ✅ Supported |
 
-```
-docs/installation.md
-```
+Current release:
 
-## BLE protocol
+**Version 1.0.1**
 
-The BLE protocol has been reverse engineered from real Sterilor devices.
+---
 
-Known features include:
+# 🗺 Roadmap
 
-- Production reading
-- Production setpoint writing
-- pH reading
-- Device status monitoring
-
-Technical details are available in:
-
-```
-protocol.md
-```
-
-## Roadmap
-
-### Version 1.1
+## Version 1.1
 
 - pH setpoint writing
-- RSSI monitoring
+- BLE RSSI monitoring
 - Improved diagnostics
 
-### Future
+## Future
 
-- Automatic BLE discovery
-- Firmware compatibility improvements
 - Additional Sterilor models
+- Automatic BLE discovery
+- New dashboard widgets
 
-## Disclaimer
+---
 
-This project is **not affiliated with or endorsed by Sterilor**.
+# ⚠ Disclaimer
+
+This project is **not affiliated with, endorsed by, or supported by Sterilor**.
 
 Sterilor is a trademark of its respective owner.
 
-## License
+---
 
-MIT License.
+# 🤝 Contributing
 
-## Acknowledgements
+Bug reports, feature requests and pull requests are welcome.
 
-This project was developed through a collaborative effort combining:
+If you own another Sterilor model, your feedback is greatly appreciated.
+
+---
+
+# 🙏 Credits
+
+This project was developed through:
 
 - Bluetooth Low Energy reverse engineering
 - ESPHome development
 - Home Assistant integration
 - Extensive real-world testing
 
-The goal is to provide the Home Assistant community with a reliable and easy-to-use integration for Sterilor XP devices.
+Its goal is to provide the Home Assistant community with a reliable, fully local and easy-to-use integration for Sterilor XP devices.
+
+---
+
+# 📄 License
+
+MIT License.
