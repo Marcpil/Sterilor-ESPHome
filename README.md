@@ -37,7 +37,7 @@
 
 | ESP32 | Sterilor XP |
 |:------:|:-----------:|
-| ![](images/esp32.png) | ![](images/sterilor.png) |
+![](images/esp32.png) | ![](images/sterilor.png)
 
 Compatible with:
 
