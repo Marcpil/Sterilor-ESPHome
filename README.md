@@ -4,6 +4,13 @@
 
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
+## Requirements
+
+- Home Assistant
+- ESPHome
+- ESP32
+- Bluetooth Low Energy
+
 ## Contents
 
 - Overview
