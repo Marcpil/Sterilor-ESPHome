@@ -10,12 +10,12 @@
 
 Sterilor XP pool controllers include a Bluetooth Low Energy (BLE) interface, but no Home Assistant integration was publicly available.
 
-This project was born from a complete reverse engineering effort of the BLE protocol, carried out **without any official documentation**.
+This project originated from a reverse engineering effort of the BLE protocol, carried out **without any official documentation**.
 
 Starting from Bluetooth packet captures, HCI logs and protocol analysis, the project progressively evolved into a complete ESPHome integration capable of:
 
-- 💧 Monitoring pool water pH
-- ⚡ Monitoring salt chlorinator production
+- 💧 Reading pool water pH
+- ⚡ Reading salt chlorinator production
 - 🎛 Changing the production setpoint
 - 📡 Monitoring BLE connectivity
 - 🏠 Integrating seamlessly into Home Assistant
