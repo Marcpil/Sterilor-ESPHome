@@ -3,6 +3,13 @@
 This document describes the recommended hardware for the **Sterilor XP ESPHome** project.
 
 ---
+| Feature                 | Wi-Fi | Ethernet |
+| ----------------------- | :---: | :------: |
+| Easy installation       |   ✅   |     ✅    |
+| Stable connection       |   ⚠️  |     ✅    |
+| Best for technical room |   ⚠️  |     ✅    |
+| OTA Updates             |   ✅   |     ✅    |
+---
 
 # ESP32
 
