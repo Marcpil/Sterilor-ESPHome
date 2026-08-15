@@ -56,6 +56,12 @@ The objective has always been simple:
 |:------:|:-----------:|
 | ![](images/esp32.png) | ![](images/sterilor.png) |
 
+<p align="center">
+  <img src="images/esp32.png" width="260">
+  <img src="images/sterilor.png" width="260">
+</p>
+
+
 Supported hardware:
 
 - Sterilor XP Salt Chlorinator
