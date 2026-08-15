@@ -1,0 +1,142 @@
+type: vertical-stack
+cards:
+  - type: custom:mushroom-title-card
+    title: 🏊 Piscine
+    subtitle: 👁️ Supervision
+  - type: horizontal-stack
+    cards:
+      - type: custom:mushroom-entity-card
+        entity: sensor.thermometre_piscine_temperature
+        name: Eau
+        icon: mdi:thermometer
+        layout: vertical
+        fill_container: true
+      - type: custom:mushroom-template-card
+        entity: sensor.pompe_piscine_etat
+        primary: Filtration
+        secondary: '{{ states(''sensor.pompe_piscine_etat'') }}'
+        icon: mdi:pump
+        color: |
+          {% if is_state('sensor.pompe_piscine_etat','En marche') %}
+            green
+          {% else %}
+            red
+          {% endif %}
+        vertical: true
+        features_position: bottom
+      - type: custom:mushroom-entity-card
+        entity: sensor.jardin_sterilor_piscine_sterilor_production_sel
+        name: SEL
+        icon: mdi:percent
+        layout: vertical
+        fill_container: true
+      - type: custom:mushroom-entity-card
+        entity: sensor.jardin_sterilor_piscine_sterilor_ph_bassin
+        name: pH
+        icon: mdi:ph
+        layout: vertical
+        fill_container: true
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.jardin_sterilor_piscine_sterilor_connexion_electrolyseur
+        primary: Cellule SEL
+        secondary: |
+          {% if is_state(entity,'on') %}
+            Connectée
+          {% else %}
+            Déconnectée
+          {% endif %}
+        icon: |
+          {% if is_state(entity,'on') %}
+            mdi:check-circle
+          {% else %}
+            mdi:close-circle
+          {% endif %}
+        icon_color: |
+          {% if is_state(entity,'on') %}
+            green
+          {% else %}
+            red
+          {% endif %}
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.jardin_sterilor_piscine_sterilor_connexion_regulateur_ph
+        primary: Régulateur pH
+        secondary: |
+          {% if is_state(entity,'on') %}
+            Connecté
+          {% else %}
+            Déconnecté
+          {% endif %}
+        icon: |
+          {% if is_state(entity,'on') %}
+            mdi:check-circle
+          {% else %}
+            mdi:close-circle
+          {% endif %}
+        icon_color: |
+          {% if is_state(entity,'on') %}
+            green
+          {% else %}
+            red
+          {% endif %}
+  - type: custom:mushroom-title-card
+    subtitle: ⚙️ Commandes
+  - type: grid
+    columns: 3
+    square: false
+    cards:
+      - type: custom:mushroom-entity-card
+        entity: switch.relay_nodon_pompe_piscine
+        name: Pompe
+        layout: vertical
+        fill_container: true
+        tap_action:
+          action: toggle
+        state_color: true
+      - type: custom:mushroom-entity-card
+        entity: input_boolean.automatisation_filtration_piscine
+        name: Mode Auto
+        layout: vertical
+        fill_container: true
+        tap_action:
+          action: toggle
+        state_color: true
+      - type: custom:mushroom-template-card
+        entity: sensor.pince_amperemetrique_owon_power_l2
+        primary: Consommation
+        secondary: |
+          {{ states('sensor.pince_amperemetrique_owon_power_l2') }} W
+        icon: mdi:lightning-bolt
+        icon_color: yellow
+        layout: vertical
+  - type: grid
+    columns: 2
+    square: false
+    cards:
+      - type: custom:mushroom-entity-card
+        entity: input_datetime.piscine_debut_filtration
+        name: Début
+        icon: mdi:clock-start
+        layout: horizontal
+      - type: custom:mushroom-entity-card
+        entity: input_datetime.piscine_fin_filtration
+        name: Fin
+        icon: mdi:clock-end
+        layout: horizontal
+  - type: custom:mushroom-template-card
+    entity: number.jardin_sterilor_piscine_consigne_production_sel
+    primary: Consigne SEL
+    secondary: >
+      {{ states('number.jardin_sterilor_piscine_consigne_production_sel') | int
+      }} %
+
+      👆 Touchez pour modifier
+    icon: mdi:tune-variant
+    icon_color: green
+    layout: horizontal
+    multiline_secondary: true
+    tap_action:
+      action: more-info
