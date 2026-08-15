@@ -183,6 +183,13 @@ The protocol was discovered using several complementary tools.
 Each decoded register was validated on a real Sterilor installation.
 
 ---
+# Captured frames
+
+01 00 14 01 50 01 00 00 01    --> Production = 80 %
+
+01 00 0B 1D 89   -->  pH = 7.561
+
+---
 
 # Future work
 
