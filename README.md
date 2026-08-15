@@ -54,11 +54,11 @@ The objective has always been simple:
 
 | ESP32 | Sterilor XP |
 |:------:|:-----------:|
-| ![](images/esp32.png) | ![](images/sterilor.png) |
+| ![](images/esp32.jpg) | ![](images/sterilor.jpg) |
 
 <p align="center">
-  <img src="images/esp32.png" width="260">
-  <img src="images/sterilor.png" width="260">
+  <img src="images/esp32.jpg" width="260">
+  <img src="images/sterilor.jpg" width="260">
 </p>
 
 
