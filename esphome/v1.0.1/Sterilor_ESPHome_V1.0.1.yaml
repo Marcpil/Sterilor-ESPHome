@@ -1,0 +1,583 @@
+###############################################################################
+# Sterilor ESPHome V1.0.1
+#
+# Version de référence
+# - Lecture pH bassin
+# - Lecture/écriture production SEL
+# - Diagnostics BLE
+# - Ecriture consigne pH désactivée (protocole non validé)
+###############################################################################
+
+esphome:
+  name: sterilor-piscine
+  friendly_name: Sterilor piscine
+
+esp32:
+  variant: esp32s3
+  flash_size: 16MB
+  framework:
+    type: esp-idf
+
+logger:
+  level: DEBUG
+  logs:
+    sterilor_analyse: INFO
+
+api:
+  reboot_timeout: 15min
+
+ota:
+  - platform: esphome
+
+ethernet:
+  type: W5500
+  clk_pin: GPIO13
+  mosi_pin: GPIO11
+  miso_pin: GPIO12
+  cs_pin: GPIO14
+  reset_pin: GPIO9
+  interrupt_pin: GPIO10
+  clock_speed: 16MHz
+
+  manual_ip:
+    static_ip: 192.168.1.152
+    gateway: 192.168.1.254
+    subnet: 255.255.255.0
+    dns1: 45.90.28.72
+    dns2: 45.90.30.72
+
+esp32_ble_tracker:
+  scan_parameters:
+    active: true
+    continuous: true
+
+globals:
+  - id: cible_production_sel
+    type: int
+    restore_value: false
+    initial_value: "0"
+
+  - id: ecriture_sel_en_cours
+    type: bool
+    restore_value: false
+    initial_value: "false"
+
+ble_client:
+  - mac_address: E4:45:48:7B:D3:6B
+    id: sterilor_sel
+    auto_connect: true
+
+    on_connect:
+      then:
+        - binary_sensor.template.publish:
+            id: connexion_sterilor_sel
+            state: true
+        - logger.log:
+            level: INFO
+            format: "Sterilor SEL connecté et services découverts"
+        - delay: 1s
+        - ble_client.ble_write:
+            id: sterilor_sel
+            service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+            characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+            value: [0x01, 0x00, 0x05, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+        - delay: 300ms
+        - ble_client.ble_write:
+            id: sterilor_sel
+            service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+            characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+            value: [0x01, 0x00, 0x14, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+        - delay: 300ms
+        - ble_client.ble_write:
+            id: sterilor_sel
+            service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+            characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+            value: [0x01, 0x00, 0x0B, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+
+    on_disconnect:
+      then:
+        - binary_sensor.template.publish:
+            id: connexion_sterilor_sel
+            state: false
+        - lambda: |-
+            id(ecriture_sel_en_cours) = false;
+        - logger.log:
+            level: WARN
+            format: "Sterilor SEL déconnecté"
+
+  - mac_address: E6:70:28:41:07:B3
+    id: sterilor_ph
+    auto_connect: true
+
+    on_connect:
+      then:
+        - binary_sensor.template.publish:
+            id: connexion_sterilor_ph
+            state: true
+        - logger.log:
+            level: INFO
+            format: "Sterilor pH connecté et services découverts"
+        - delay: 1s
+        - ble_client.ble_write:
+            id: sterilor_ph
+            service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+            characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+            value: [0x01, 0x01, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+
+        - delay: 300ms
+
+        - ble_client.ble_write:
+            id: sterilor_ph
+            service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+            characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+            value: [0x01, 0x01, 0x03, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+
+        - delay: 300ms
+
+        - ble_client.ble_write:
+            id: sterilor_ph
+            service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+            characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+            value: [0x01, 0x01, 0x12, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+
+        - delay: 300ms
+
+        - ble_client.ble_write:
+            id: sterilor_ph
+            service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+            characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+            value: [0x01, 0x01, 0x13, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+
+        - delay: 300ms
+
+        - ble_client.ble_write:
+            id: sterilor_ph
+            service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+            characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+            value: [0x01, 0x01, 0x14, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+
+        - delay: 300ms
+
+        - ble_client.ble_write:
+            id: sterilor_ph
+            service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+            characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+            value: [0x01, 0x01, 0x15, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+
+        - delay: 300ms
+
+        - ble_client.ble_write:
+            id: sterilor_ph
+            service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+            characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+            value: [0x01, 0x01, 0x16, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+
+    on_disconnect:
+      then:
+        - binary_sensor.template.publish:
+            id: connexion_sterilor_ph
+            state: false
+        - logger.log:
+            level: WARN
+            format: "Sterilor pH déconnecté"
+
+text_sensor:
+  - platform: ble_client
+    id: sterilor_sel_notifications
+    ble_client_id: sterilor_sel
+    service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+    characteristic_uuid: "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
+    notify: true
+    update_interval: never
+    internal: true
+    on_notify:
+      then:
+        - lambda: |-
+            const auto *d = reinterpret_cast<const uint8_t *>(x.data());
+            const size_t n = x.size();
+
+            if (n != 11) {
+              ESP_LOGW("sterilor", "Trame SEL invalide : %u octets",
+                       static_cast<unsigned>(n));
+              return;
+            }
+
+            ESP_LOGD(
+              "sterilor",
+              "SEL RX %02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X",
+              d[0], d[1], d[2], d[3], d[4], d[5],
+              d[6], d[7], d[8], d[9], d[10]
+            );
+
+            if (d[1] != 0x00) {
+              return;
+            }
+
+            switch (d[2]) {
+              case 0x05: {
+                const int production = d[5];
+                id(reglage_production_sel).publish_state(production);
+
+                if (id(ecriture_sel_en_cours)) {
+                  if (production == id(cible_production_sel)) {
+                    ESP_LOGI("sterilor", "Écriture SEL confirmée : %d %%", production);
+                    id(ecriture_sel_en_cours) = false;
+                  } else {
+                    ESP_LOGD(
+                      "sterilor",
+                      "Confirmation SEL encore ancienne : %d %% (cible %d %%)",
+                      production,
+                      id(cible_production_sel)
+                    );
+                  }
+                }
+                break;
+              }
+
+              case 0x14:
+                id(production_sel_observee).publish_state(d[4]);
+                id(etat_brut_sel).publish_state(d[8]);
+                break;
+
+              case 0x0B: {
+                const uint16_t raw =
+                    (static_cast<uint16_t>(d[3] & 0x7F) << 8) | d[4];
+                float ph = raw / 1000.0f;
+                id(ph_relaye_par_sel).publish_state(ph);
+                break;
+              }
+
+              default:
+                ESP_LOGD("sterilor", "Registre SEL non traité : 0x%02X", d[2]);
+                break;
+            }
+
+  - platform: ble_client
+    id: sterilor_ph_notifications
+    ble_client_id: sterilor_ph
+    service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+    characteristic_uuid: "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
+    notify: true
+    update_interval: never
+    internal: true
+    on_notify:
+      then:
+        - lambda: |-
+            const auto *d = reinterpret_cast<const uint8_t *>(x.data());
+            const size_t n = x.size();
+
+            if (n != 11) {
+              ESP_LOGW("sterilor", "Trame pH invalide : %u octets",
+                       static_cast<unsigned>(n));
+              return;
+            }
+
+
+            ESP_LOGI(
+                "BLE_RAW",
+                "RX %02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X",
+                d[0], d[1], d[2], d[3], d[4],
+                d[5], d[6], d[7], d[8], d[9], d[10]
+            );
+
+            return;
+
+
+            if (d[1] != 0x01) {
+              return;
+            }
+
+            switch (d[2]) {
+              case 0x01: {
+                const uint16_t raw =
+                    (static_cast<uint16_t>(d[3]) << 8) | d[4];
+                const float value = raw / 1000.0f;
+                ESP_LOGI(
+                  "sterilor_analyse",
+                  "pH REG 0x01 brut=%u valeur=%.3f",
+                  raw,
+                  value
+                );
+                break;
+              }
+
+              case 0x03: {
+                const uint16_t raw =
+                    (static_cast<uint16_t>(d[3] & 0x7F) << 8) | d[4];
+                break;
+              }
+
+              case 0x12: {
+                ESP_LOGI(
+                  "sterilor_analyse",
+                  "pH REG 0x12 payload=%02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X",
+                  d[3], d[4], d[5], d[6], d[7], d[8], d[9], d[10]
+                );
+                const uint16_t raw =
+                    (static_cast<uint16_t>(d[3] & 0x7F) << 8) | d[4];
+                break;
+              }
+
+              case 0x13: {
+                ESP_LOGI(
+                  "sterilor_analyse",
+                  "REG13 raw=%02X-%02X-%02X-%02X-%02X-%02X-%02X-%02X",
+                  d[3], d[4], d[5], d[6], d[7], d[8], d[9], d[10]);
+
+                ESP_LOGI(
+                  "sterilor_analyse",
+                  "REG13 u16=%u %u %u %u",
+                  (d[3] << 8) | d[4],
+                  (d[5] << 8) | d[6],
+                  (d[7] << 8) | d[8],
+                  (d[9] << 8) | d[10]);
+
+                ESP_LOGI(
+                  "sterilor_analyse",
+                  "REG13 b=%u %u %u %u %u %u %u %u",
+                  d[3], d[4], d[5], d[6], d[7], d[8], d[9], d[10]);
+                break;
+              }
+
+              default:
+                ESP_LOGD(
+                  "sterilor",
+                  "Registre pH non traité : 0x%02X",
+                  d[2]
+                );
+                break;
+            }
+
+  - platform: ethernet_info
+    ip_address:
+      name: Adresse IP Sterilor
+    dns_address:
+      name: DNS Sterilor
+    mac_address:
+      name: Adresse MAC Ethernet Sterilor
+
+binary_sensor:
+  - platform: status
+    name: État Sterilor piscine
+
+  - platform: template
+    id: connexion_sterilor_sel
+    name: Sterilor - Connexion électrolyseur
+    device_class: connectivity
+
+  - platform: template
+    id: connexion_sterilor_ph
+    name: Sterilor - Connexion régulateur pH
+    device_class: connectivity
+
+sensor:
+  - platform: template
+    id: production_sel_observee
+    name: Sterilor - Production SEL
+    unit_of_measurement: "%"
+    accuracy_decimals: 0
+    icon: mdi:percent
+    update_interval: never
+
+  - platform: template
+    id: etat_brut_sel
+    name: Sterilor - État électrolyseur
+    accuracy_decimals: 0
+    entity_category: diagnostic
+    update_interval: never
+
+  - platform: template
+    id: ph_relaye_par_sel
+    name: Sterilor - pH bassin
+    unit_of_measurement: "pH"
+    accuracy_decimals: 1
+    state_class: measurement
+    icon: mdi:ph
+    update_interval: never
+
+  - platform: uptime
+    name: Durée de fonctionnement Sterilor
+
+switch:
+  - platform: template
+    id: autoriser_commandes_sterilor
+    name: Autoriser commandes Sterilor
+    icon: mdi:shield-lock-open-outline
+    optimistic: true
+    restore_mode: ALWAYS_OFF
+    entity_category: config
+
+number:
+  - platform: template
+    id: reglage_production_sel
+    name: Consigne production SEL
+    icon: mdi:percent
+    unit_of_measurement: "%"
+    min_value: 0
+    max_value: 100
+    step: 5
+    mode: slider
+    optimistic: false
+
+    set_action:
+      then:
+        - if:
+            condition:
+              switch.is_off: autoriser_commandes_sterilor
+            then:
+              - logger.log:
+                  level: WARN
+                  format: "Commande SEL refusée : activez d'abord « Autoriser commandes Sterilor »"
+            else:
+              - if:
+                  condition:
+                    lambda: |-
+                      return id(ecriture_sel_en_cours);
+                  then:
+                    - logger.log:
+                        level: WARN
+                        format: "Commande SEL refusée : une écriture est déjà en cours"
+                  else:
+                    - lambda: |-
+                        id(cible_production_sel) = static_cast<int>(x + 0.5f);
+                    - script.execute: ecrire_production_sel
+script:
+  - id: ecrire_production_sel
+    mode: single
+    then:
+      - if:
+          condition:
+            binary_sensor.is_off: connexion_sterilor_sel
+          then:
+            - logger.log:
+                level: ERROR
+                format: "Écriture SEL impossible : module non connecté"
+          else:
+            - lambda: |-
+                id(ecriture_sel_en_cours) = true;
+                ESP_LOGI(
+                  "sterilor",
+                  "Demande de production SEL : %d %%",
+                  id(cible_production_sel)
+                );
+
+            - ble_client.ble_write:
+                id: sterilor_sel
+                service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+                characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+                value: [0x02, 0x00, 0x0A, 0x19, 0xA1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+
+            - delay: 500ms
+
+            - ble_client.ble_write:
+                id: sterilor_sel
+                service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+                characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+                value: [0x01, 0x00, 0x05, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+            - delay: 300ms
+
+            - ble_client.ble_write:
+                id: sterilor_sel
+                service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+                characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+                value: [0x01, 0x00, 0x19, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+            - delay: 300ms
+
+            - ble_client.ble_write:
+                id: sterilor_sel
+                service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+                characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+                value: [0x01, 0x00, 0x14, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+            - delay: 300ms
+
+            - ble_client.ble_write:
+                id: sterilor_sel
+                service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+                characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+                value: [0x01, 0x00, 0x17, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+            - delay: 300ms
+
+            - ble_client.ble_write:
+                id: sterilor_sel
+                service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+                characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+                value: [0x01, 0x00, 0x0B, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+            - delay: 300ms
+
+            - ble_client.ble_write:
+                id: sterilor_sel
+                service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+                characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+                value: [0x01, 0x00, 0x06, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+            - delay: 300ms
+
+            - ble_client.ble_write:
+                id: sterilor_sel
+                service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+                characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+                value: [0x01, 0x00, 0x03, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+
+            - delay: 500ms
+
+            - ble_client.ble_write:
+                id: sterilor_sel
+                service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+                characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+                value: [0x02, 0x00, 0x18, 0x6A, 0x6C, 0x4C, 0x98, 0xFF, 0xFF, 0xFF, 0xFF]
+
+            - delay: 700ms
+
+            - ble_client.ble_write:
+                id: sterilor_sel
+                service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+                characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+                value: !lambda |-
+                  return std::vector<uint8_t>{
+                    0x02,
+                    0x00,
+                    0x05,
+                    0xFF,
+                    0x01,
+                    static_cast<uint8_t>(id(cible_production_sel)),
+                    0xFF,
+                    0xFF,
+                    0xFF,
+                    0xFF,
+                    0xFF
+                  };
+
+            - delay: 300ms
+
+            - ble_client.ble_write:
+                id: sterilor_sel
+                service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+                characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+                value: [0x01, 0x00, 0x14, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+
+            - delay: 700ms
+
+            - ble_client.ble_write:
+                id: sterilor_sel
+                service_uuid: "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+                characteristic_uuid: "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
+                value: [0x01, 0x00, 0x05, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+
+            - delay: 2s
+
+            - if:
+                condition:
+                  lambda: |-
+                    return id(ecriture_sel_en_cours);
+                then:
+                  - lambda: |-
+                      ESP_LOGW(
+                        "sterilor",
+                        "Écriture SEL non confirmée : cible %d %%",
+                        id(cible_production_sel)
+                      );
+                      id(ecriture_sel_en_cours) = false;
+
+button:
+
+  - platform: restart
+    name: Redémarrer Sterilor
