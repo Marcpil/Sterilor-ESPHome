@@ -56,11 +56,6 @@ The objective has always been simple:
 |:------:|:-----------:|
 | ![](images/esp32.jpg) | ![](images/sterilor.jpg) |
 
-<p align="center">
-  <img src="images/esp32.jpg" width="260">
-  <img src="images/sterilor.jpg" width="260">
-</p>
-
 
 Supported hardware:
 
