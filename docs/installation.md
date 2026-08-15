@@ -1,6 +1,6 @@
 # Installation Guide
 
-This guide explains how to install the **Sterilor XP ESPHome** integration in Home Assistant.
+This guide explains how to install the **Sterilor XP ESPHome** integration in Home Assistant. Estimated installation time: 10–15 minutes
 
 ---
 
