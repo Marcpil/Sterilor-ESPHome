@@ -159,13 +159,14 @@ Sterilor-ESPHome/
 ├── docs/
 │   ├── installation.md
 │   └── hardware.md
+│   └── protocol.md
 │
 ├── images/
 │   ├── dashboard.png
 │   ├── esp32.png
 │   └── sterilor.png
-│
-├── protocol.md
+│   └── logo.png
+|
 ├── CHANGELOG.md
 └── README.md
 ```
