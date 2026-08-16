@@ -17,6 +17,16 @@ Before starting, make sure you have:
 
 ---
 
+# Recommended installation
+
+
+<p align="left">
+  <img src="/images/schema.png" width="600">
+</p>
+
+---
+
+
 # 1. Download the project
 
 Download the latest release from GitHub.
