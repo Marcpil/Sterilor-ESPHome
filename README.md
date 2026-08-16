@@ -5,6 +5,10 @@
 
 # 🏊 Sterilor XP ESPHome
 
+<p align="center">
+  <img src="images/logo.png" width="150" alt="Sterilor XP ESPHome logo">
+</p>
+
 > **Native ESPHome integration for Sterilor XP salt chlorinator and pH regulator using Bluetooth Low Energy (BLE).**
 
 ![Dashboard](images/dashboard.png)
