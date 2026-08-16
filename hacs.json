@@ -1,13 +1,5 @@
 {
   "name": "Sterilor XP ESPHome",
   "content_in_root": false,
-  "domains": [
-    "esphome"
-  ],
-  "homeassistant": "2026.1.0",
-  "render_readme": true,
-  "zip_release": false,
-  "country": [
-    "FR"
-  ]
+  "render_readme": true
 }
