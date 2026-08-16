@@ -110,7 +110,9 @@ No Internet connection is required.
                                │
                      Home Assistant
 ```
-
+<p align="left">
+  <img src="/images/schema.png" width="600">
+</p>
 ---
 
 # ESP32 location
