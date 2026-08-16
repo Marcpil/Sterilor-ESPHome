@@ -1,3 +1,8 @@
+![GitHub release](https://img.shields.io/github/v/release/Marcpil/Sterilor-ESPHome)
+![License](https://img.shields.io/github/license/Marcpil/Sterilor-ESPHome)
+![ESPHome](https://img.shields.io/badge/ESPHome-Compatible-blue)
+![Home Assistant](https://img.shields.io/badge/Home_Assistant-Compatible-41BDF5)
+
 # 🏊 Sterilor XP ESPHome
 
 > **Native ESPHome integration for Sterilor XP salt chlorinator and pH regulator using Bluetooth Low Energy (BLE).**
