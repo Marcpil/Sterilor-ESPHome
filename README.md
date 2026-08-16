@@ -166,6 +166,7 @@ Sterilor-ESPHome/
 │   ├── esp32.png
 │   └── sterilor.png
 │   └── logo.png
+|   └── schema.png
 |
 ├── CHANGELOG.md
 └── README.md
