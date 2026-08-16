@@ -9,10 +9,12 @@
 ###############################################################################
 
 esphome:
-  project:
   name: sterilor-piscine
   friendly_name: Sterilor piscine
-  version: "1.0.1"
+
+  project:
+    name: marcpil.sterilor_xp
+    version: "1.0.1"
 
 esp32:
   variant: esp32s3
