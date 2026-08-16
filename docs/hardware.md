@@ -97,22 +97,11 @@ No Internet connection is required.
 
 # Recommended installation
 
-```
-                 Bluetooth
 
-   Sterilor SEL  ◄────────────┐
-                               │
-   Sterilor pH   ◄────────────┤
-                               │
-                         ESP32
-                               │
-                     Wi-Fi / Ethernet
-                               │
-                     Home Assistant
-```
 <p align="left">
   <img src="/images/schema.png" width="600">
 </p>
+
 ---
 
 # ESP32 location
